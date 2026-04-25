@@ -72,7 +72,22 @@ class TeachingBrain:
                 reasoning="Input contains an arithmetic pattern, calculator is the right tool.",
             )
 
-        if "notes" in tools and any(word in latest.lower() for word in ["agent", "tool", "memory", "trace"]):
+        lowered = latest.lower()
+        if "memory" in tools and (
+            lowered.startswith(("remember ", "recall "))
+            or "what is my " in lowered
+            or "what are my " in lowered
+        ):
+            return Decision(
+                kind="tool",
+                tool_name="memory",
+                content=latest,
+                reasoning="Input asks to remember or recall a fact, route to memory tool.",
+            )
+
+        if "notes" in tools and any(
+            word in lowered for word in ["agent", "tool", "memory", "trace"]
+        ):
             return Decision(
                 kind="tool",
                 tool_name="notes",

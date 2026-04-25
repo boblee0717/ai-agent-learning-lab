@@ -6,6 +6,8 @@ import re
 from dataclasses import dataclass
 from typing import ClassVar, Protocol
 
+from agent_course.memory import InMemoryStore, Memory
+
 
 class ToolError(Exception):
     """Raised when a tool fails in an expected way (bad input, unsupported op, etc.)."""
@@ -92,6 +94,55 @@ class NotesTool:
         if matches:
             return " ".join(matches)
         return "No note matched. Try asking about agent, tool, memory, or trace."
+
+
+class MemoryTool:
+    """Long-term memory exposed as a tool.
+
+    Inputs are tiny natural-language verbs:
+
+    - ``remember name Bob`` stores ``name -> Bob``.
+    - ``what is my name`` (or ``recall name``) returns matching facts.
+
+    The tool delegates storage to a ``Memory`` implementation, so a learner
+    can later swap ``InMemoryStore`` for a real vector store without touching
+    the agent loop or the brain.
+    """
+
+    name = "memory"
+    description = (
+        "Use to remember or recall short facts. "
+        "Input forms: 'remember <key> <value>' or 'recall <query>' / 'what is my <key>'."
+    )
+
+    _remember_re = re.compile(r"^\s*remember\s+(\S+)\s+(.+)$", re.IGNORECASE)
+    _recall_re = re.compile(r"^\s*(?:recall|what\s+(?:is|are)\s+(?:my\s+)?)(.+)$", re.IGNORECASE)
+
+    def __init__(self, store: Memory | None = None) -> None:
+        self.store: Memory = store or InMemoryStore()
+
+    def run(self, tool_input: str) -> str:
+        text = tool_input.strip()
+
+        m = self._remember_re.match(text)
+        if m:
+            key, value = m.group(1), m.group(2).strip()
+            self.store.remember(key, value)
+            return f"Remembered {key} = {value}."
+
+        m = self._recall_re.match(text)
+        if m:
+            query = m.group(1).strip(" ?.")
+            matches = self.store.recall(query)
+            return "; ".join(matches) if matches else f"I do not remember anything about {query!r}."
+
+        # Last resort: free-text recall against all keys.
+        matches = self.store.recall(text)
+        if matches:
+            return "; ".join(matches)
+        raise ToolError(
+            "Memory tool input must look like 'remember <key> <value>' or 'recall <query>'."
+        )
 
 
 def _extract_expression(text: str) -> str:
