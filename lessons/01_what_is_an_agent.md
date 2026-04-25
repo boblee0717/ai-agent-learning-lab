@@ -26,9 +26,9 @@ In this repo, `TeachingBrain` is not an LLM. It is a clear, deterministic substi
 
 ## Exercise
 
-Run:
+Run (works on macOS, Linux, and Windows):
 
-```powershell
+```bash
 python -m agent_course "What is 8 * 7?"
 python -m agent_course "What is 1 / 0?"
 ```

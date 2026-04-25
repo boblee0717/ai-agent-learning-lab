@@ -1,0 +1,27 @@
+# Force LF for all text files in the repository so a checkout on Windows
+# does not produce CRLF that breaks pytest collection on macOS/Linux later.
+* text=auto eol=lf
+
+# Explicit overrides for the file types we ship.
+*.py    text eol=lf diff=python
+*.md    text eol=lf
+*.toml  text eol=lf
+*.yml   text eol=lf
+*.yaml  text eol=lf
+*.json  text eol=lf
+*.cfg   text eol=lf
+*.txt   text eol=lf
+
+# Windows-only scripts keep CRLF if we ever ship any.
+*.ps1   text eol=crlf
+*.bat   text eol=crlf
+*.cmd   text eol=crlf
+
+# Common binary types — never touch.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.pdf   binary
+*.zip   binary
+*.gz    binary

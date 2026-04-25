@@ -11,7 +11,7 @@ Implement `FileStore`, a `Memory` implementation that persists facts to a JSON f
 1. Open `exercises/starter/ex05_file_memory.py`.
 2. Implement `FileStore` so it satisfies the `Memory` protocol from `agent_course.memory`.
 3. Run:
-   ```powershell
+   ```bash
    pytest exercises/tests/test_05_file_memory.py -q
    ```
 

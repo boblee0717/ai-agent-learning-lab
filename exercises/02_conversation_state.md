@@ -11,7 +11,7 @@ Build a tiny `Conversation` helper that owns the message list and enforces basic
 1. Open `exercises/starter/ex02_conversation.py`.
 2. Implement `Conversation` so the tests pass.
 3. Run:
-   ```powershell
+   ```bash
    pytest exercises/tests/test_02_conversation.py -q
    ```
 

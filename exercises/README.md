@@ -11,7 +11,7 @@ Hands-on practice for each lesson. Every exercise has three pieces:
 
 ## Workflow
 
-```powershell
+```bash
 # Run only the exercise tests
 pytest exercises/tests -q
 
@@ -19,8 +19,10 @@ pytest exercises/tests -q
 pytest exercises/tests/test_03_unit_converter.py -q
 
 # Run everything (course code + exercises)
-pytest -q
+pytest -q exercises/tests tests
 ```
+
+> Works the same on macOS, Linux, and Windows. Use forward slashes everywhere — Python normalizes them on Windows.
 
 When you start, the exercise tests should fail with messages that tell you what to implement next. As you fill in the `# TODO` blocks in `exercises/starter/`, more tests turn green.
 
@@ -41,9 +43,17 @@ Each brief has an **Acceptance** section. If `pytest exercises/tests/test_NN_*.p
 
 ## If you really want to peek at a solution
 
+macOS / Linux:
+
+```bash
+cp exercises/solutions/ex03_unit_converter.py exercises/starter/ex03_unit_converter.py
+pytest exercises/tests/test_03_unit_converter.py -q
+```
+
+Windows PowerShell:
+
 ```powershell
-# Run the autograder against the reference solution for one exercise:
-Copy-Item exercises\solutions\ex03_unit_converter.py exercises\starter\ex03_unit_converter.py -Force
+Copy-Item exercises/solutions/ex03_unit_converter.py exercises/starter/ex03_unit_converter.py -Force
 pytest exercises/tests/test_03_unit_converter.py -q
 ```
 

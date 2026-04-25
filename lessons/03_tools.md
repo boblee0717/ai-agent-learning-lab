@@ -14,9 +14,9 @@ The agent does not need to know how the tool works internally. It only needs to 
 
 Run:
 
-```powershell
-python examples\01_run_tool.py
+```bash
+python examples/01_run_tool.py
 ```
 
-Then open `examples\03_add_a_tool.py` and look at `WeatherTool`. It adds a new capability without changing the agent loop.
+Then open `examples/03_add_a_tool.py` and look at `WeatherTool`. It adds a new capability without changing the agent loop.
 

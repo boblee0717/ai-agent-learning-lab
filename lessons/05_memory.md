@@ -11,13 +11,13 @@ This repo gives you a `Memory` protocol and an `InMemoryStore` implementation in
 
 ## Try It
 
-```powershell
-python examples\04_memory.py
+```bash
+python examples/04_memory.py
 ```
 
 Notice that the same `MemoryTool` instance is reused across every `agent.run` call, so facts persist between conversations.
 
 ## Exercise
 
-1. Add a `--persist` flag to `examples\04_memory.py` that pickles `memory_tool.store.all()` to disk before exit and reloads on startup. The agent should remember things between processes.
+1. Add a `--persist` flag to `examples/04_memory.py` that pickles `memory_tool.store.all()` to disk before exit and reloads on startup. The agent should remember things between processes.
 2. Replace `InMemoryStore` with a SQLite-backed implementation. The agent loop should not change a single line.

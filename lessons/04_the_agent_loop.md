@@ -33,7 +33,7 @@ When a tool raises, the loop captures the failure as an observation and feeds it
 
 Try:
 
-```powershell
+```bash
 python -m agent_course "What is 1 / 0?"
 ```
 

@@ -17,7 +17,7 @@ The tool must support these conversions:
 1. Open `exercises/starter/ex03_unit_converter.py`.
 2. Implement `UnitConverterTool.run` and `UnitAwareBrain.decide`.
 3. Run:
-   ```powershell
+   ```bash
    pytest exercises/tests/test_03_unit_converter.py -q
    ```
 

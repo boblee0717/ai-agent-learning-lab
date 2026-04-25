@@ -34,16 +34,23 @@ Keeping this interface stable lets you swap the brain without rewriting the agen
 
 ## Try It
 
-```powershell
+```bash
 # Echo brain: prints the prompt that would be sent to a real LLM, then
 # answers locally so the agent loop is fully deterministic.
-python examples\05_llm_brain.py
+python examples/05_llm_brain.py
 
 # Real OpenAI call (optional). Install the extra and provide a key first.
 pip install -e ".[llm]"
-$env:OPENAI_API_KEY = "sk-..."
-$env:USE_OPENAI = "1"
-python examples\05_llm_brain.py
+
+# macOS / Linux:
+export OPENAI_API_KEY="sk-..."
+export USE_OPENAI=1
+
+# Windows PowerShell:
+#   $env:OPENAI_API_KEY = "sk-..."
+#   $env:USE_OPENAI = "1"
+
+python examples/05_llm_brain.py
 ```
 
 ## Exercise

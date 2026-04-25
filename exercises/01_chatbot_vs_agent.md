@@ -16,7 +16,7 @@ Both must accept the **same prompt set** and produce reasonable answers, but onl
 1. Open `exercises/starter/ex01_chatbot_vs_agent.py`.
 2. Fill in the two TODO blocks.
 3. Run:
-   ```powershell
+   ```bash
    pytest exercises/tests/test_01_chatbot_vs_agent.py -q
    ```
 

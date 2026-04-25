@@ -22,16 +22,32 @@ class FileStore:
             return {}
 
     def _write(self, data: dict[str, str]) -> None:
-        # Atomic write: temp file in the same directory + os.replace.
-        with tempfile.NamedTemporaryFile(
+        # Atomic write that works on Windows, macOS, and Linux:
+        # write to a sibling temp file, fsync, then atomically rename. On
+        # any failure we clean the temp file up so it does not litter the
+        # directory (Windows is especially unhappy with stray temp files).
+        tmp = tempfile.NamedTemporaryFile(
             mode="w",
             encoding="utf-8",
             dir=self.path.parent,
             delete=False,
-        ) as tmp:
-            json.dump(data, tmp, ensure_ascii=False, indent=2)
-            tmp_path = tmp.name
-        os.replace(tmp_path, self.path)
+            newline="\n",
+        )
+        tmp_path = tmp.name
+        try:
+            try:
+                json.dump(data, tmp, ensure_ascii=False, indent=2)
+                tmp.flush()
+                os.fsync(tmp.fileno())
+            finally:
+                tmp.close()
+            os.replace(tmp_path, self.path)
+        except Exception:
+            try:
+                os.unlink(tmp_path)
+            except OSError:
+                pass
+            raise
 
     def remember(self, key: str, value: str) -> None:
         data = self._read()

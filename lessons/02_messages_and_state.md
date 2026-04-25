@@ -13,5 +13,5 @@ Open `src/agent_course/messages.py`. The `Message` class is small on purpose. Ma
 
 ## Exercise
 
-In `src/agent_course/agent.py`, change the system message text. Run `examples\02_run_agent.py` again and inspect `result.messages` in a debugger or temporary print.
+In `src/agent_course/agent.py`, change the system message text. Run `python examples/02_run_agent.py` again and inspect `result.messages` in a debugger or temporary print.
 

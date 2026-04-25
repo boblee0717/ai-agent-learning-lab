@@ -13,7 +13,7 @@ This exercise teaches you that **the loop is fixed; new behavior comes from new 
 1. Open `exercises/starter/ex04_retry_brain.py`.
 2. Implement `RetryBrain.decide`.
 3. Run:
-   ```powershell
+   ```bash
    pytest exercises/tests/test_04_retry_brain.py -q
    ```
 

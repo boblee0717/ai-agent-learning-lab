@@ -13,7 +13,7 @@ You will reuse `EchoLlmBrain`'s `responder` hook — that is exactly what it is 
 1. Open `exercises/starter/ex06_keyword_brain.py`.
 2. Implement `keyword_responder(prompt, messages, tools) -> Decision`.
 3. Run:
-   ```powershell
+   ```bash
    pytest exercises/tests/test_06_keyword_brain.py -q
    ```
 
