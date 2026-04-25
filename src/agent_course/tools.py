@@ -4,7 +4,11 @@ import ast
 import operator
 import re
 from dataclasses import dataclass
-from typing import Protocol
+from typing import ClassVar, Protocol
+
+
+class ToolError(Exception):
+    """Raised when a tool fails in an expected way (bad input, unsupported op, etc.)."""
 
 
 class Tool(Protocol):
@@ -21,11 +25,17 @@ class ToolSpec:
     description: str
 
 
+# Safety limits for the teaching calculator. Prevents pathological inputs like
+# 2 ** 10_000_000 from hanging the interpreter or eating all the memory.
+_MAX_EXPRESSION_LENGTH = 200
+_MAX_POW_EXPONENT = 64
+
+
 class CalculatorTool:
     name = "calculator"
     description = "Use for simple arithmetic, such as 2 + 2 or 12 * (3 + 4)."
 
-    _operators = {
+    _operators: ClassVar[dict[type[ast.AST], object]] = {
         ast.Add: operator.add,
         ast.Sub: operator.sub,
         ast.Mult: operator.mul,
@@ -36,7 +46,16 @@ class CalculatorTool:
 
     def run(self, tool_input: str) -> str:
         expression = _extract_expression(tool_input)
-        value = self._eval(ast.parse(expression, mode="eval").body)
+        try:
+            tree = ast.parse(expression, mode="eval")
+        except SyntaxError as exc:
+            raise ToolError(f"Could not parse expression: {expression!r}") from exc
+
+        try:
+            value = self._eval(tree.body)
+        except ZeroDivisionError as exc:
+            raise ToolError("Division by zero.") from exc
+
         if isinstance(value, float) and value.is_integer():
             value = int(value)
         return str(value)
@@ -47,10 +66,12 @@ class CalculatorTool:
         if isinstance(node, ast.BinOp) and type(node.op) in self._operators:
             left = self._eval(node.left)
             right = self._eval(node.right)
+            if isinstance(node.op, ast.Pow) and isinstance(right, int | float) and right > _MAX_POW_EXPONENT:
+                raise ToolError(f"Exponent too large (>{_MAX_POW_EXPONENT}).")
             return self._operators[type(node.op)](left, right)
         if isinstance(node, ast.UnaryOp) and type(node.op) in self._operators:
             return self._operators[type(node.op)](self._eval(node.operand))
-        raise ValueError("Only simple arithmetic is supported.")
+        raise ToolError("Only simple arithmetic is supported.")
 
 
 class NotesTool:
@@ -74,11 +95,13 @@ class NotesTool:
 
 
 def _extract_expression(text: str) -> str:
+    if len(text) > _MAX_EXPRESSION_LENGTH:
+        raise ToolError(f"Input too long (>{_MAX_EXPRESSION_LENGTH} chars).")
     matches = re.findall(r"[\d\s+\-*/().^]+", text)
     if not matches:
-        raise ValueError("No arithmetic expression found.")
+        raise ToolError("No arithmetic expression found.")
     expression = max((match.strip() for match in matches), key=len)
     expression = expression.strip(" .,!?;:").replace("^", "**")
     if not expression:
-        raise ValueError("No arithmetic expression found.")
+        raise ToolError("No arithmetic expression found.")
     return expression

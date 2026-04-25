@@ -7,7 +7,6 @@ from typing import Literal, Protocol
 from agent_course.messages import Message
 from agent_course.tools import CalculatorTool, NotesTool, Tool
 
-
 DecisionKind = Literal["answer", "tool"]
 
 
@@ -82,7 +81,7 @@ class Agent:
                 trace.append(f"final answer: {decision.content}")
                 return AgentResult(decision.content, messages, trace, tool_calls)
 
-            if decision.tool_name not in self.tools:
+            if decision.tool_name is None or decision.tool_name not in self.tools:
                 answer = f"I wanted to use an unknown tool: {decision.tool_name}"
                 messages.append(Message(role="assistant", content=answer))
                 trace.append(answer)
@@ -90,7 +89,10 @@ class Agent:
 
             tool = self.tools[decision.tool_name]
             trace.append(f"calling tool: {tool.name}")
-            observation = tool.run(decision.content)
+            try:
+                observation = tool.run(decision.content)
+            except Exception as exc:
+                observation = f"tool error: {exc}"
             tool_calls.append(ToolCall(name=tool.name, input=decision.content, output=observation))
             messages.append(Message(role="tool", content=observation))
             trace.append(f"observation: {observation}")

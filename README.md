@@ -18,12 +18,22 @@ The repo starts with a tiny deterministic agent instead of a real LLM. That is d
 cd E:\coding\ai-agent-learning-lab
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
-pip install -e .
+pip install -e ".[dev]"
 
+# Smoke test
+python examples\00_hello.py
+
+# Walk-through examples
 python examples\01_run_tool.py
 python examples\02_run_agent.py
 python examples\03_add_a_tool.py
-python -m unittest discover -s tests
+
+# Talk to the agent from the command line
+python -m agent_course "What is 8 * 7?"
+
+# Tests + lint
+pytest
+ruff check .
 ```
 
 If you do not want to create a virtual environment yet, run examples with:
@@ -47,8 +57,10 @@ Read one lesson, run the matching example, then make a small edit.
 ## Repo Map
 
 - `src/agent_course/messages.py`: message objects used by the agent.
-- `src/agent_course/tools.py`: tool protocol plus calculator and notes tools.
+- `src/agent_course/tools.py`: tool protocol, `ToolError`, calculator, notes.
 - `src/agent_course/agent.py`: the agent loop and a teaching brain.
+- `src/agent_course/cli.py`: `python -m agent_course "..."` entry point.
+- `examples/00_hello.py`: 3-line smoke test.
 - `examples/01_run_tool.py`: call a tool directly.
 - `examples/02_run_agent.py`: run the full agent loop.
 - `examples/03_add_a_tool.py`: add a custom tool without changing the agent loop.
