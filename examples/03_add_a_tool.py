@@ -15,7 +15,12 @@ class WeatherAwareBrain(TeachingBrain):
     def decide(self, messages: list[Message], tools: dict[str, Tool]) -> Decision:
         latest = messages[-1].content.lower()
         if messages[-1].role != "tool" and "weather" in latest and "weather" in tools:
-            return Decision(kind="tool", tool_name="weather", content=messages[-1].content)
+            return Decision(
+                kind="tool",
+                tool_name="weather",
+                content=messages[-1].content,
+                reasoning="The user asked about weather and we have a weather tool.",
+            )
         return super().decide(messages, tools)
 
 
@@ -29,10 +34,10 @@ def main() -> None:
     print(result.answer)
     print()
     print("Trace:")
-    for item in result.trace:
-        print(f"  - {item}")
+    for ev in result.trace.events:
+        step = f"step {ev.step} " if ev.step else ""
+        print(f"  - {step}{ev.kind}: {ev.message}")
 
 
 if __name__ == "__main__":
     main()
-

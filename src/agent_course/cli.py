@@ -32,8 +32,9 @@ def main(argv: list[str] | None = None) -> int:
     print(f"Answer: {result.answer}")
     if not args.no_trace:
         print("Trace:")
-        for item in result.trace:
-            print(f"  - {item}")
+        for ev in result.trace.events:
+            step = f"step {ev.step} " if ev.step else ""
+            print(f"  - {step}{ev.kind}: {ev.message}")
     return 0
 
 

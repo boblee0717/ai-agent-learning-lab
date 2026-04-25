@@ -3,6 +3,7 @@
 from agent_course.agent import Agent, AgentResult, Decision, TeachingBrain, ToolCall
 from agent_course.messages import Message
 from agent_course.tools import CalculatorTool, NotesTool, Tool, ToolError
+from agent_course.trace import Trace, TraceEvent
 
 __all__ = [
     "Agent",
@@ -15,4 +16,6 @@ __all__ = [
     "Tool",
     "ToolCall",
     "ToolError",
+    "Trace",
+    "TraceEvent",
 ]
