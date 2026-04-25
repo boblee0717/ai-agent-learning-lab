@@ -57,14 +57,22 @@ python examples\02_run_agent.py
 
 ## How To Study This Repo
 
-Read one lesson, run the matching example, then make a small edit.
+For each lesson: read the lesson, run the matching example, then do the matching exercise.
 
-1. `lessons/01_what_is_an_agent.md`
-2. `lessons/02_messages_and_state.md`
-3. `lessons/03_tools.md`
-4. `lessons/04_the_agent_loop.md`
-5. `lessons/05_memory.md`
-6. `lessons/06_replacing_the_brain_with_an_llm.md`
+| # | Lesson | Example | Exercise |
+|---|---|---|---|
+| 1 | `lessons/01_what_is_an_agent.md` | `examples/01_run_tool.py` | `exercises/01_chatbot_vs_agent.md` |
+| 2 | `lessons/02_messages_and_state.md` | `examples/02_run_agent.py` | `exercises/02_conversation_state.md` |
+| 3 | `lessons/03_tools.md` | `examples/03_add_a_tool.py` | `exercises/03_unit_converter_tool.md` |
+| 4 | `lessons/04_the_agent_loop.md` | `python -m agent_course "..."` | `exercises/04_retry_brain.md` |
+| 5 | `lessons/05_memory.md` | `examples/04_memory.py` | `exercises/05_file_memory_store.md` |
+| 6 | `lessons/06_replacing_the_brain_with_an_llm.md` | `examples/05_llm_brain.py` | `exercises/06_keyword_llm_brain.md` |
+
+Run all auto-graders together:
+
+```powershell
+pytest exercises/tests -q
+```
 
 ## Repo Map
 
