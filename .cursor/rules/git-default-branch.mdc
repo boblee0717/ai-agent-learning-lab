@@ -1,0 +1,8 @@
+---
+description: Default Git branch and remote sync expectations for this repository
+alwaysApply: true
+---
+
+# Git
+
+The default / primary branch is **master** (not `main`). When creating branches, opening PRs, or syncing with the remote, use `master` as the integration branch unless the user says otherwise.
